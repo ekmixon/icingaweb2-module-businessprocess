@@ -61,3 +61,5 @@ $this->provideJsFile('behavior/sortable.js');
 $this->provideJsFile('vendor/jquery.fn.sortable.js');
 
 $this->provideCssFile('state-ball.less');
+$this->provideCssFile('state-badge.less');
+$this->provideCssFile('state-badges.less');

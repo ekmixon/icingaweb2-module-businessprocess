@@ -314,19 +314,6 @@ ul.bp {
                 overflow: hidden;
             }
         }
-
-        .badge {
-            margin-top: 0.25em;
-            text-decoration: none;
-
-            &:last-child {
-                margin-right: 0;
-            }
-
-            &:hover {
-                box-shadow: 0px 0px 5px #666;
-            }
-        }
     }
 
     .dashboard-tile,
@@ -357,36 +344,26 @@ ul.bp {
 }
 /** END Dashboard **/
 
-/** BEGIN Badges **/
-.badges {
-    background-color: fade(@body-bg-color, 50%);
-    border-radius: 0.45em;
-    display: block;
-    padding: 0.3em 0.4em;
-
-    .badge {
-        border: 1px solid white;
-        margin: 0;
-    }
+// State summary badges
+.state-badges {
+    .state-badges();
 }
 
-div.bp .badges {
+// Node children count
+.item-count {
+    font-size: 1em;
+    text-align: center;
+    color: @text-color-inverted;
+}
+
+div.bp .state-badges {
     display: inline-block;
     padding-top: 0;
 }
 
-
-
-td > a > .badges {
+td > a > .state-badges {
     background-color: transparent;
 }
-
-.badge-critical, .badge-down { background: @colorCritical; }
-.badge-unknown, .badge-unreachable { background: @colorUnknown; }
-.badge-warning { background: @colorWarning; }
-.badge-pending { background: @colorPending; }
-.badge-missing { background: #ccc; }
-/** END Badges **/
 
 /** BEGIN Tiles **/
 .tiles:after {
@@ -412,7 +389,12 @@ td > a > .badges {
     cursor: pointer;
     position: relative;
 
-    .badges {
+
+    .item-count {
+        margin-right: .5em;
+    }
+
+    .state-badges {
         position: absolute;
         bottom: 0;
         right: 0;
@@ -439,17 +421,6 @@ td > a > .badges {
         font-weight: bold;
         word-wrap: break-word;
         color: @text-color-inverted;
-
-        & + p.children-count {
-            margin: 0;
-            font-size: .5em;
-            text-align: center;
-
-            span {
-                font-size: .8em;
-                font-weight: bold;
-            }
-        }
     }
 
     &:hover {

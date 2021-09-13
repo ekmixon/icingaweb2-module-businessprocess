@@ -9,9 +9,11 @@ use Icinga\Module\Businessprocess\ImportedNode;
 use Icinga\Module\Businessprocess\MonitoredNode;
 use Icinga\Module\Businessprocess\Node;
 use Icinga\Module\Businessprocess\Web\Url;
+use Icinga\Module\Businessprocess\Widget\StateBadge;
 use ipl\Html\BaseHtmlElement;
 use ipl\Html\Html;
 use ipl\Html\HtmlDocument;
+use Tests\Icinga\Module\Setup\TrueRequirement;
 
 abstract class Renderer extends HtmlDocument
 {
@@ -135,34 +137,34 @@ abstract class Renderer extends HtmlDocument
      * @param $summary
      * @return BaseHtmlElement
      */
-    public function renderStateBadges($summary)
+    public function renderStateBadges($summary, $totalChildren)
     {
         $elements = [];
 
-        foreach ($summary as $state => $cnt) {
-            if ($cnt === 0
-                || $state === 'OK'
-                || $state === 'UP'
-            ) {
-                continue;
-            }
-
-            $elements[] = Html::tag(
-                'span',
-                [
-                    'class' => [
-                        'badge',
-                        'badge-' . strtolower($state)
-                    ],
-                    // TODO: We should translate this in this module
-                    'title' => mt('monitoring', $state)
+        $itemCount = Html::tag(
+            'span',
+            [
+                'class' => [
+                    'item-count',
                 ],
-                $cnt
-            );
-        }
+                // TODO: We should translate this in this module
+                'title' => mt('monitoring', 'widget')
+            ],
+            $totalChildren
+        );
+
+        $elements[] = array_filter([
+            $this->createBadgeGroup($summary, 'CRITICAL'),
+            $this->createBadgeGroup($summary, 'UNKNOWN'),
+            $this->createBadgeGroup($summary, 'WARNING'),
+            $this->createBadge($summary, 'OK'),
+            $this->createBadge($summary, 'MISSING'),
+            $this->createBadge($summary, 'PENDING')
+        ]);
 
         if (!empty($elements)) {
-            $container = Html::tag('div', ['class' => 'badges']);
+            $container = Html::tag('ul', ['class' => 'state-badges']);
+            $container->add($itemCount);
             foreach ($elements as $element) {
                 $container->add($element);
             }
@@ -172,12 +174,39 @@ abstract class Renderer extends HtmlDocument
         return null;
     }
 
+    protected function createBadge($summary, $state)
+    {
+        if ($summary[$state] !== 0) {
+            return Html::tag('li', new StateBadge($summary[$state], $state));
+        }
+
+        return null;
+    }
+
+    protected function createBadgeGroup($summary, $state)
+    {
+        $content = [];
+        if ($summary[$state] !== 0) {
+            $content[] = Html::tag('li', new StateBadge($summary[$state], $state));
+        }
+
+        if ($summary[$state . '-HANDLED'] !== 0) {
+            $content[] = Html::tag('li', new StateBadge($summary[$state . '-HANDLED'], $state, true));
+        }
+
+        if (empty($content)) {
+            return null;
+        }
+
+        return Html::tag('li', Html::tag('ul', $content));
+    }
+
     public function getNodeClasses(Node $node)
     {
         if ($node->isMissing()) {
             $classes = array('missing');
         } else {
-            if ($node->isEmpty() && ! $node instanceof MonitoredNode) {
+            if ($node->isEmpty() && !$node instanceof MonitoredNode) {
                 $classes = array('empty');
             } else {
                 $classes = [strtolower($node->getStateName(
@@ -205,7 +234,7 @@ abstract class Renderer extends HtmlDocument
     /**
      * Return the url to the given node's source configuration
      *
-     * @param   BpNode  $node
+     * @param BpNode $node
      *
      * @return  Url
      */
@@ -221,12 +250,12 @@ abstract class Renderer extends HtmlDocument
 
         $url = clone $this->getUrl();
         $url->setParams([
-            'config'    => $node->getBpConfig()->getName(),
-            'node'      => $name
+            'config' => $node->getBpConfig()->getName(),
+            'node' => $name
         ]);
         // This depends on the fact that the node's root path is the last element in $paths
         $url->getParams()->addValues('path', array_slice(array_pop($paths), 0, -1));
-        if (! $this->isLocked()) {
+        if (!$this->isLocked()) {
             $url->getParams()->add('unlocked', true);
         }
 
