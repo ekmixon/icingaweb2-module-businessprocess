@@ -73,7 +73,7 @@ class BpNode extends Node
                     $this->counters['MISSING']++;
                 } else {
                     $state = $child->getStateName($this->getChildState($child));
-                    if ($child->isHandled()) {
+                    if ($child->isHandled() && ($state !== 'UP' && $state !== 'OK')) {
                         $state = $state . '-HANDLED';
                     }
 
