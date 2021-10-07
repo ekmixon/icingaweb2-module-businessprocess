@@ -10,7 +10,7 @@ a:focus {
     display: flex;
     align-items: center;
     font-size: 1.3em;
-    color: @icinga-blue;
+    .var(color, icinga-blue);
 
     > a {
         &:hover::before {
@@ -23,7 +23,7 @@ a:focus {
 
         &.button-link {
             color: white;
-            background: @icinga-blue;
+            .var(background, icinga-blue);
 
             &:active, &:focus {
                 text-decoration: none;
@@ -48,7 +48,8 @@ a:focus {
 
             i {
                 padding: .25em .5em;
-                border: 1px solid @icinga-blue;
+                border: 1px solid;
+                .var(border-color, icinga-blue);
 
                 &:before {
                     margin-right: 0;
@@ -56,7 +57,7 @@ a:focus {
 
                 &.active {
                     color: white;
-                    background-color: @icinga-blue;
+                    .var(background-color, icinga-blue);
                 }
 
                 &:first-of-type {
@@ -77,7 +78,7 @@ a:focus {
 }
 
 form a {
-    color: @icinga-blue;
+    .var(color, icinga-blue);
 }
 
 div.bp {
@@ -258,10 +259,10 @@ ul.bp {
 
     // hover style
     li.process:hover > div {
-        background-color: @tr-active-color;
+        .var(background-color, tr-active-color);
     }
     li:not(.process):hover {
-        background-color: @tr-active-color;
+        .var(background-color, tr-active-color);
     }
 
     li.process > div > .state-ball,
@@ -349,7 +350,7 @@ ul.bp {
             box-sizing: border-box;
 
             &.addnew:hover {
-                background-color: @icinga-blue;
+                .var(background-color, icinga-blue);
                 color: white;
             }
         }
@@ -609,7 +610,7 @@ td > a > .badges {
 
 }
 .breadcrumb li a {
-    color: @icinga-blue;
+    .var(color, icinga-blue);
     margin: 0;
     font-size: 1.2em;
     text-decoration: none;
@@ -642,8 +643,9 @@ td > a > .badges {
 
     &:last-of-type {
         border-radius: .25em;
-        border: 1px solid @icinga-blue;
-        background: @icinga-blue;
+        border: 1px solid;
+        .var(border-color, icinga-blue);
+        .var(background, icinga-blue);
         padding-right: 1.2em;
 
         a {
@@ -693,7 +695,7 @@ td > a > .badges {
     }
     .breadcrumb li:not(:last-of-type) a:hover {
         background-color: transparent !important;
-        color: @icinga-blue;
+        .var(color, icinga-blue);
     }
 }
 
@@ -706,9 +708,9 @@ td > a > .badges {
     padding-right: 0.5em;
 }
 
-.breadcrumb li:not(:last-child) a:hover { background: @icinga-blue; color: white; }
-.breadcrumb li:not(:last-child) a:hover:after { border-left-color: @icinga-blue; }
-.breadcrumb li:last-child:hover, .breadcrumb li:last-child a:hover { background: @icinga-blue; border-color: @icinga-blue; }
+.breadcrumb li:not(:last-child) a:hover { .var(background, icinga-blue); color: white; }
+.breadcrumb li:not(:last-child) a:hover:after { .var(border-left-color, icinga-blue); }
+.breadcrumb li:last-child:hover, .breadcrumb li:last-child a:hover { .var(background, icinga-blue); .var(border-color, icinga-blue); }
 
 .breadcrumb li a:focus {
     text-decoration: underline;
@@ -823,7 +825,7 @@ form input[type=submit]:first-of-type {
 }
 
 form input[type=submit].link-button {
-    color: @icinga-blue;
+    .var(color, icinga-blue);
     background: none;
     border: none;
     padding: 0;
@@ -852,7 +854,7 @@ form ul.form-errors {
     margin-bottom: 0.5em;
 
     ul.errors li {
-        background: @color-critical;
+        .var(background, color-critical);
         font-weight: bold;
         padding: 0.5em 1em;
         color: white;
@@ -924,7 +926,7 @@ select, input[type=text], textarea {
 
     &:focus, &:focus:hover {
         border-style: solid;
-        border-color: @icinga-blue;
+        .var(border-color, icinga-blue);
         outline: none;
     }
 }
@@ -1016,7 +1018,7 @@ form dt {
 }
 
 form dt.active, form dd.active {
-    background-color: @tr-active-color;
+    .var(background-color, tr-active-color);
 }
 
 form dt {
@@ -1026,12 +1028,12 @@ form dt {
     min-height: 2.5em;
     width: 30%;
     &.errors label {
-        color: @color-critical;
+        .var(color, color-critical);
     }
 }
 
 form .errors label {
-    color: @color-critical;
+    .var(color, color-critical);
 }
 
 form dd {
@@ -1042,7 +1044,7 @@ form dd {
     margin: 0;
     &.errors {
         input[type=text], select {
-            border-color: @color-critical;
+            .var(border-color, color-critical);
         }
     }
 
@@ -1073,7 +1075,7 @@ form dd ul.errors {
 
 form div.hint {
     padding: 1em;
-    background-color: @tr-hover-color;
+    .var(background-color, tr-hover-color);
     margin: 1em 0;
     max-width: 65em;
     font-size: 1em;
